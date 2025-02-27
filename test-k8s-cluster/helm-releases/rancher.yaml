@@ -20,5 +20,5 @@ spec:
   targetNamespace: cattle-system
   values:
     bootstrapPassword: bootstrapPassword
-    hostname: rancher.172.23.113.103.sslip.io
+    hostname: rancher.172.23.113.122.sslip.io
     replicas: 1
