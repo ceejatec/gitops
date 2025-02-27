@@ -8,13 +8,13 @@ spec:
   chart:
     spec:
       chart: cert-manager
-      values:
-        crds:
-          enabled: true
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
         name: jetstack
+  values:
+    crds:
+      enabled: true
   interval: 1h0m0s
   install:
     createNamespace: true
