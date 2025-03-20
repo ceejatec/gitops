@@ -1,0 +1,26 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: prometheus
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: prometheus
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: prometheus-community
+  dependsOn:
+  - name: cert-manager
+  install:
+    createNamespace: true
+  interval: 1h0m0s
+  targetNamespace: prometheus
+  values:
+    server:
+      ingress:
+        enabled: true
+        hosts:
+        - prometheus.build.couchbase.com
