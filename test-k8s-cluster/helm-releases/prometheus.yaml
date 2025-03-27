@@ -24,3 +24,13 @@ spec:
         enabled: true
         hosts:
         - prometheus.build.couchbase.com
+    extraScrapeConfigs: |
+      # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+      - job_name: "cvjenkins"
+
+        # metrics_path defaults to '/metrics'
+        metrics_path: "/prometheus"
+        # scheme defaults to 'http'.
+
+        static_configs:
+          - targets: ["cv.jenkins.couchbase.com"]
