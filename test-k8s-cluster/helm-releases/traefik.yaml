@@ -17,25 +17,9 @@ spec:
   interval: 1h0m0s
   targetNamespace: traefik
   values:
-    # Use a DaemonSet so that Traefik runs on all nodes in the cluster.
-    # This is useful for on-prem clusters where we don't have a load
-    # balancer.
-    deployment:
-      kind: DaemonSet
-    service:
-      # By default the Helm chart creates a LoadBalancer service, but
-      # that doesn't work on-prem
-      type: ClusterIP
     ingressRoute:
       dashboard:
         enabled: true
-    ports:
-      # By using hostPort, each node in the cluster will listen on
-      # these ports.
-      web:
-        hostPort: 80
-      websecure:
-        hostPort: 443
     extraObjects:
     - apiVersion: traefik.io/v1alpha1
       kind: TLSStore
