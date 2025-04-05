@@ -1,0 +1,166 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: k8s-gateway
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: k8s-gateway
+      reconcileStrategy: ChartVersion
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-gateway
+  install:
+    createNamespace: true
+  interval: 1h0m0s
+  targetNamespace: k8s-gateway
+  values:
+    domain: build.couchbase.com
+    service:
+      loadBalancerIP: 172.23.115.254
+    fallthrough:
+      enabled: true
+
+    # temporary-ish: DNS entries for .build.couchbase.com resources
+    # that are not (yet?) in this cluster
+    zoneFiles:
+    - filename: db.build.couchbase.com
+      domains: build.couchbase.com
+      contents: |
+        $ORIGIN build.couchbase.com.
+        @ 3600 IN SOA svwsvdc06.corp.couchbase.com. hostmaster.corp.couchbase.com. 20250404 7200 3600 1209600 3600
+          3600 IN NS hqwsvdc07.corp.couchbase.com.
+          3600 IN NS svwsvdc06.corp.couchbase.com.
+
+        changelog        IN CNAME mega4.build.couchbase.com.
+        clamav-mirror    IN CNAME mega4.build.couchbase.com.
+        defectdojo       IN CNAME mega4.build.couchbase.com.
+        docker-registry  IN CNAME mega4.build.couchbase.com.
+        goproxy          IN CNAME mega4.build.couchbase.com.
+        maven-cache      IN CNAME mega4.build.couchbase.com.
+        pathdiff         IN CNAME mega4.build.couchbase.com.
+        profiledata      IN CNAME mega4.build.couchbase.com.
+        tools            IN CNAME mega4.build.couchbase.com.
+        xo               IN CNAME mega4.build.couchbase.com.
+
+        downloads        IN CNAME cnt-s231.sc.couchbase.com.
+        nas              IN CNAME cnt-s231.sc.couchbase.com.
+
+        blackduck        IN A 172.23.104.223
+        blackduck-test   IN A 172.23.96.226
+        build-db         IN A 172.23.96.250
+        build-db         IN A 172.23.107.139
+        build-db         IN A 172.23.96.217
+        build-db-01      IN A 172.23.96.217
+        build-db-02      IN A 172.23.107.139
+        build-db-03      IN A 172.23.96.250
+        buildx-arm64-01  IN A 10.100.151.12
+        dbapi            IN A 172.23.96.250
+        dbapi            IN A 172.23.96.217
+        dbapi            IN A 172.23.107.139
+        dockerhub        IN A 172.23.104.149
+        mac-s132         IN A 172.23.113.147
+        mac-s132a        IN A 172.23.113.147
+        mac-s132b        IN A 172.23.113.154
+        mac-s133a        IN A 172.23.113.155
+        mac-s133b        IN A 172.23.113.156
+        mac-s134a        IN A 172.23.113.157
+        mac-s134b        IN A 172.23.113.158
+        mac-s135a        IN A 172.23.113.159
+        mac-s135b        IN A 172.23.113.160
+        mac-s136a        IN A 172.23.113.161
+        mac-s136b        IN A 172.23.113.162
+        mac-s137a        IN A 172.23.113.163
+        mac-s137b        IN A 172.23.113.164
+        macos-10-11-01   IN A 172.23.113.146
+        macos-10-13-01   IN A 172.23.96.21
+        mega3            IN A 172.23.123.43
+        mega4            IN A 172.23.113.49
+        mega4            IN A 172.23.105.183
+        mega4            IN A 172.23.121.104
+        mega4            IN A 172.23.96.171
+        mega4            IN A 172.23.113.28
+        mega4-01         IN A 172.23.96.195
+        mega4-02         IN A 172.23.96.196
+        mega4-03         IN A 172.23.97.105
+        mega4-04         IN A 172.23.96.198
+        mega4-05         IN A 172.23.96.200
+        mega4-06         IN A 172.23.96.203
+        mega4-07         IN A 172.23.96.218
+        mega4-08         IN A 172.23.120.229
+        mega4-09         IN A 172.23.120.230
+        mega4-10         IN A 172.23.120.233
+        mega4-11         IN A 172.23.120.237
+        mega4-12         IN A 172.23.121.38
+        mega4-13         IN A 172.23.121.47
+        mega4-14         IN A 172.23.121.48
+        mega4-15         IN A 172.23.121.49
+        mega4-16         IN A 172.23.121.50
+        mega4-17         IN A 172.23.121.60
+        mega4-18         IN A 172.23.121.58
+        mega4-19         IN A 172.23.121.59
+        mega4-20         IN A 172.23.121.62
+        mega4-swarm      IN A 172.23.97.105
+        mega4-swarm      IN A 172.23.120.229
+        mega4-swarm      IN A 172.23.121.38
+        monitoring       IN A 172.23.97.49
+        new_dockerhub    IN A 172.23.104.149
+        nexus            IN A 172.23.96.144
+        old_dockerhub    IN A 172.23.99.227
+        proget           IN A 172.23.113.15
+        rhel72-build-01  IN A 172.23.113.207
+        sdk-mac-01       IN A 172.23.96.29
+        sdk-swarm        IN A 172.23.97.81
+        sdk-swarm        IN A 172.23.97.97
+        sdk-swarm        IN A 172.23.97.95
+        sdk-swarm-01     IN A 172.23.97.81
+        sdk-swarm-02     IN A 172.23.97.95
+        sdk-swarm-03     IN A 172.23.97.97
+        sdk-window-01    IN A 172.23.96.160
+        sonarqube        IN A 172.23.112.7
+        suse12-build-01  IN A 172.23.113.172
+        xen-01           IN A 172.23.105.160
+        xen-02           IN A 172.23.123.45
+        xen-03           IN A 172.23.113.72
+        xen-04           IN A 172.23.104.32
+
+  # https://github.com/ori-edge/k8s_gateway/issues/279#issuecomment-2309773449
+  postRenderers:
+    - kustomize:
+        patches:
+          - patch: |-
+              apiVersion: rbac.authorization.k8s.io/v1
+              kind: ClusterRole
+              metadata:
+                name: k8s-gateway-k8s-gateway
+                labels:
+                  app.kubernetes.io/name: k8s-gateway
+                  app.kubernetes.io/instance: k8s-gateway
+              rules: []
+          - patch: |-
+              apiVersion: rbac.authorization.k8s.io/v1
+              kind: ClusterRole
+              metadata:
+                name: k8s-gateway-k8s-gateway
+                labels:
+                  app.kubernetes.io/name: k8s-gateway
+                  app.kubernetes.io/instance: k8s-gateway
+              rules:
+                - apiGroups:
+                  - ""
+                  resources:
+                  - services
+                  - namespaces
+                  verbs:
+                  - list
+                  - watch
+                - apiGroups:
+                  - extensions
+                  - networking.k8s.io
+                  resources:
+                  - ingresses
+                  verbs:
+                  - list
+                  - watch
